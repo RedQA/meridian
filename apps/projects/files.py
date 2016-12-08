@@ -1,11 +1,22 @@
 import os
+import shutil
+
 from flask import current_app
 
 exclude_dir_list = set([".git", ".idea", ".vscode"])
 
+codetype_mapping = {
+    ".sh": "shBrushBash.js",
+    ".java": "shBrushJava.js",
+    ".py": "shBrushPython.js",
+    ".rb": "shBrushScala.js",
+    ".php": "shBrushPhp.js",
+    ".css": "shBrushCss.js",
+    ".js": "shBrushJScript.js"
+}
+
 
 def is_directory(project, fpath):
-    print project
     split_fpath = []
     if fpath:
         split_fpath = fpath.split("/")
@@ -39,5 +50,16 @@ def get_directory_structure(dpath, request_path=None):
     return ret
 
 
-def read_file(fpath):
-    pass
+def read_file_with_type(fpath):
+    """
+        return (content,codetype,codetype_js)
+    """
+    basename = os.path.basename(fpath)
+    extname = os.path.splitext(basename)[1]
+    if not extname or extname not in codetype_mapping:
+        return None, None, None
+    else:
+        with open(fpath, "r") as f:
+            content = f.read()
+
+        return content, extname[1:], codetype_mapping[extname]

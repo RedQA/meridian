@@ -1,5 +1,5 @@
 import json
-from apps.projects.files import is_directory, get_directory_structure
+from apps.projects.files import is_directory, get_directory_structure, read_file_with_type
 
 from flask import Blueprint, current_app, jsonify, render_template, request, current_app
 
@@ -25,7 +25,17 @@ def project_tree_path(pname, fpath=None):
             d_content = get_directory_structure(path, request.path)
             return render_template("structure.html", **d_content)
         else:
-            return render_template("code.html",**{
-                "code_type_script": "adfdsf"
-            })
+            f_content, code_type, code_type_script = read_file_with_type(path)
+            if f_content:
+                return render_template("code.html", ** {
+                    "content": f_content,
+                    "code_type": code_type,
+                    "code_type_script": code_type_script
+                })
+            else:
+                return render_template("code.html", ** {
+                    "content": "could not support this kind of content",
+                    "code_type": code_type,
+                    "code_type_script": code_type_script
+                })
     # FIXME add 404 handler
