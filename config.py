@@ -2,7 +2,7 @@ import os
 import sys
 import yaml
 
-from flask import Flask, g
+from flask import Flask, redirect
 from db import DB
 
 app = Flask(__name__)
@@ -30,3 +30,9 @@ db_path = custom_yaml_path = os.path.join(os.path.abspath(
 
 # set the database instance to the app.config
 app.config.db = DB(db_path=db_path)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # if 404, redirect back to the home page
+    return redirect("/")
