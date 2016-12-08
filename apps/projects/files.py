@@ -10,7 +10,7 @@ codetype_mapping = {
     ".sh": "shBrushBash.js",
     ".java": "shBrushJava.js",
     ".py": "shBrushPython.js",
-    ".rb": "shBrushScala.js",
+    ".rb": "shBrushRuby.js",
     ".php": "shBrushPhp.js",
     ".css": "shBrushCss.js",
     ".js": "shBrushJScript.js"

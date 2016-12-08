@@ -29,4 +29,4 @@ db_path = custom_yaml_path = os.path.join(os.path.abspath(
     os.path.dirname(__file__)), "meridian.json")
 
 # set the database instance to the app.config
-app.config.project_db = DB(db_path=db_path)
+app.config.db = DB(db_path=db_path)

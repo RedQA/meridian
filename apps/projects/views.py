@@ -1,41 +1,61 @@
 import json
-from apps.projects.files import is_directory, get_directory_structure, read_file_with_type
 
-from flask import Blueprint, current_app, jsonify, render_template, request, current_app
+from flask import Blueprint, current_app, jsonify, render_template, request
+
+from apps.middleware import gd
+from apps.projects.files import (get_directory_structure, is_directory,
+                                 read_file_with_type)
 
 project = Blueprint("project", __name__,
                     template_folder="../../templates", static_folder="../.../static")
 
 
-@project.route("/")
-def projects():
-    if request.method == "GET":
-        return jsonify({})
-    elif request.method == "POST":
-        pass
-
-
 @project.route("/<string:pname>/tree/")
 @project.route("/<string:pname>/tree/<path:fpath>")
+@gd
 def project_tree_path(pname, fpath=None):
-    project = current_app.config.project_db.get_project_by_name(pname)
+    project = current_app.config.db.get_project_by_name(pname)
     if project:
         ret, path = is_directory(project, fpath)
+        breadlinks = bread_link(pname, fpath)
         if ret:
             d_content = get_directory_structure(path, request.path)
-            return render_template("structure.html", **d_content)
+            d_content["breadlinks"] = breadlinks
+            return "structure.html", d_content
         else:
             f_content, code_type, code_type_script = read_file_with_type(path)
             if f_content:
-                return render_template("code.html", ** {
+                f_context = {
                     "content": f_content,
                     "code_type": code_type,
-                    "code_type_script": code_type_script
-                })
+                    "code_type_script": code_type_script,
+                    "breadlinks": breadlinks
+                }
+                return "code.html", f_context
             else:
-                return render_template("code.html", ** {
+                f_context = {
                     "content": "could not support this kind of content",
                     "code_type": code_type,
-                    "code_type_script": code_type_script
-                })
+                    "code_type_script": code_type_script,
+                    "breadlinks": breadlinks
+                }
+                return "code.html", f_context
+
     # FIXME add 404 handler
+
+
+def bread_link(pname, fpath):
+    ret = []
+    if not fpath:
+        return ret
+
+    fpath = fpath[:-1] if fpath.endswith("/") else fpath
+    paths = fpath.split("/")
+    links = ["/projects", pname, "tree"]
+    ret.insert(0, {"name": pname, "url": "/".join(links)})
+    for path in paths:
+        links.append(path)
+        blink = "/".join(links)
+        ret.append({"name": path, "url": blink})
+
+    return ret
