@@ -32,6 +32,16 @@
 
     <!-- Custom Theme Style -->
     <link href="{{ url_for('static', filename='bower_components/gentelella/build/css/custom.min.css') }}" rel="stylesheet">
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='vendor/syntaxhighlighter_3.0.83/src/shCore.js') }}"></script>
+
+    <!-- choose the right js for the different language -->
+    <script type="text/javascript" src="{{ url_for('static', filename='vendor/syntaxhighlighter_3.0.83/scripts/')}}{{code_type_script}}"></script>
+
+    <!-- Include *at least* the core style and default theme -->
+    <link href="{{ url_for('static', filename='vendor/syntaxhighlighter_3.0.83/styles/shCore.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='vendor/syntaxhighlighter_3.0.83/styles/shThemeDefault.css') }}" rel="stylesheet" type="text/css" />
 </head>
 
 <body class="nav-md">
@@ -46,7 +56,7 @@
                     <div class="clearfix"></div>
 
                     <!-- menu profile quick info -->
-    
+
                     <!-- /menu profile quick info -->
 
                     <br />
@@ -196,11 +206,11 @@
             <!-- /top navigation -->
 
             <!-- page content -->
-            <div class="right_col" role="main" style="min-height: 1392px;">
+            <div class="right_col" role="main" style="min-height: 1162px;">
                 <div class="">
                     <div class="page-title">
                         <div class="title_left">
-                            <h3>Projects <small>Listing design</small></h3>
+                            <h3>Tables <small>Some examples to get you started</small></h3>
                         </div>
 
                         <div class="title_right">
@@ -218,10 +228,10 @@
                     <div class="clearfix"></div>
 
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>Projects</h2>
+                                    <h2>Table design <small>Custom design</small></h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
@@ -239,59 +249,12 @@
                                     </ul>
                                     <div class="clearfix"></div>
                                 </div>
+
                                 <div class="x_content">
-
-                                    <p>Simple table with project listing with progress and editing options</p>
-
-                                    <!-- start project list -->
-                                    <table class="table table-striped projects">
-                                        <thead>
-                                            <tr>
-                                                <th style="width: 1%">#</th>
-                                                <th style="width: 20%">Project Name</th>
-                                                <th>Team Members</th>
-                                                <th>Project Progress</th>
-                                                <th>Status</th>
-                                                <th style="width: 20%">#Edit</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>#</td>
-                                                <td>
-                                                    <a>Pesamakini Backend UI</a>
-                                                    <br>
-                                                    <small>Created 01.01.2015</small>
-                                                </td>
-                                                <td>
-                                                    <ul class="list-inline">
-                                                        <li>
-                                                            <img src="images/user.png" class="avatar" alt="Avatar">
-                                                        </li>
-                                                        <li>
-                                                            <img src="images/user.png" class="avatar" alt="Avatar">
-                                                        </li>
-                                                    </ul>
-                                                </td>
-                                                <td class="project_progress">
-                                                    <div class="progress progress_sm">
-                                                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="47" aria-valuenow="46" style="width: 47%;"></div>
-                                                    </div>
-                                                    <small>47% Complete</small>
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-success btn-xs">Success</button>
-                                                </td>
-                                                <td>
-                                                    <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                                                    <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                                                    <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <!-- end project list -->
-
+                                    <!-- code highlight-->
+                                    <pre class="brush: {{code_type}}">
+                                        {{ content }}
+                                    </pre>
                                 </div>
                             </div>
                         </div>
@@ -351,6 +314,7 @@
 
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
+
 </body>
 
 </html>

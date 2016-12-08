@@ -3,14 +3,11 @@
 from flask import render_template
 from config import app
 
-from apps.projects.view import project
+from apps.projects.views import project
+from apps.views import index
 
 app.register_blueprint(project, url_prefix="/projects")
-
-
-@app.route('/')
-def index(name=None):
-    return render_template('index.html')
+app.register_blueprint(index)
 
 if __name__ == "__main__":
     app.run()

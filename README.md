@@ -29,15 +29,6 @@ Project Schema
 ```
 GET /projects
 GET /projects/{project_name}
-
-[
-    {
-    "project_name": "fulishe",
-    "git": "https://gitlab.xiaohongshu.com/red-qa/meridian.git",
-    "redis_db": "0",
-    "fs_root": "/repository/fulishe"
-    },
-]
 ```
 
 项目文件列表
