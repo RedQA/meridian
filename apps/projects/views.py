@@ -34,9 +34,9 @@ def project_tree_path(pname, fpath=None):
                 return "code.html", f_context
             else:
                 f_context = {
-                    "content": "could not support this kind of content",
-                    "code_type": code_type,
-                    "code_type_script": code_type_script,
+                    "content": "print 'I could not load the content'",
+                    "code_type": "py",
+                    "code_type_script": "shBrushPython.js",
                     "breadlinks": breadlinks
                 }
                 return "code.html", f_context
