@@ -1,5 +1,6 @@
 import os
 import shutil
+import codecs
 
 from flask import current_app
 
@@ -59,7 +60,7 @@ def read_file_with_type(fpath):
     if not extname or extname not in codetype_mapping:
         return None, None, None
     else:
-        with open(fpath, "r") as f:
-            content = f.read()
-
+        # solve the utf8 encodig problem
+        f = codecs.open(fpath, mode='r', encoding="utf-8")
+        content = f.read()
         return content, extname[1:], codetype_mapping[extname]
