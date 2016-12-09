@@ -13,7 +13,21 @@ codetype_mapping = {
     ".rb": "shBrushRuby.js",
     ".php": "shBrushPhp.js",
     ".css": "shBrushCss.js",
-    ".js": "shBrushJScript.js"
+    ".js": "shBrushJScript.js",
+    ".sql": "shBrushSql.js",
+    ".xml": "shBrushXml.js"
+}
+
+codetype_alias = {
+    ".sh": "bash",
+    ".java": "java",
+    ".py": "py",
+    ".rb": "rb",
+    ".php": "php",
+    ".css": "css",
+    ".js": "js",
+    ".sql": "sql",
+    ".xml": "xml"
 }
 
 
@@ -63,4 +77,4 @@ def read_file_with_type(fpath):
         # solve the utf8 encodig problem
         f = codecs.open(fpath, mode='r', encoding="utf-8")
         content = f.read()
-        return content, extname[1:], codetype_mapping[extname]
+        return content, codetype_alias[extname], codetype_mapping[extname]

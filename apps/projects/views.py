@@ -24,6 +24,7 @@ def project_tree_path(pname, fpath=None):
             return "structure.html", d_content
         else:
             f_content, code_type, code_type_script = read_file_with_type(path)
+            print code_type,code_type_script
             if f_content:
                 f_context = {
                     "content": f_content,
