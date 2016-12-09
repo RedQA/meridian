@@ -3,7 +3,7 @@ import sys
 import yaml
 
 from flask import Flask, redirect
-from db import DB
+from db import JsonDB
 
 app = Flask(__name__)
 app.debug = True
@@ -24,12 +24,14 @@ with open(custom_yaml_path, "r") as f:
         sys.exit(-1)
 
     app.config.git_repo_root = git_repo_root
+    # redis configuration
+    app.config.redis_config = custom_config["redis"]
 
 db_path = custom_yaml_path = os.path.join(os.path.abspath(
     os.path.dirname(__file__)), "meridian.json")
 
 # set the database instance to the app.config
-app.config.db = DB(db_path=db_path)
+app.config.db = JsonDB(db_path=db_path)
 
 
 @app.errorhandler(404)

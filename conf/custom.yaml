@@ -1,1 +1,4 @@
 git_repo_root: /Users/shaoyuliang/xiaohongshu/code/gitlab/
+redis:
+    host: localhost
+    port: 6379
