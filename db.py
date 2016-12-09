@@ -49,10 +49,10 @@ class RedisManager(object):
                 "redis_db":0
             }
         """
-        pname = preject["name"]
-        redis_db = int(project["redis_db"])
+        pname = project["name"]
+        redis_db = int(project["redisdb"])
         redis_db_conn = None
-        if pname in cls.redis_dbpool_by_project:
+        if pname in cls.redis_dbconn_pool_by_project:
             redis_db_conn = cls.redis_dbconn_pool_by_project[pname]
         else:
             redis_config = current_app.config.redis_config

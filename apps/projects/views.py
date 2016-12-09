@@ -1,7 +1,7 @@
 import json
 
 from flask import Blueprint, current_app, jsonify, render_template, request
-
+from apps.covstats import get_hit_set
 from apps.middleware import gd
 from apps.projects.files import (get_directory_structure, is_directory,
                                  read_file_with_type)
@@ -24,9 +24,10 @@ def project_tree_path(pname, fpath=None):
             return "structure.html", d_content
         else:
             f_content, code_type, code_type_script = read_file_with_type(path)
-            print code_type,code_type_script
             if f_content:
+                hl = get_hit_set(project, fpath)
                 f_context = {
+                    "highlights": str(hl),
                     "content": f_content,
                     "code_type": code_type,
                     "code_type_script": code_type_script,
@@ -34,6 +35,7 @@ def project_tree_path(pname, fpath=None):
                 }
                 return "code.html", f_context
             else:
+                # work round for error
                 f_context = {
                     "content": "print 'I could not load the content'",
                     "code_type": "py",
@@ -58,5 +60,5 @@ def bread_link(pname, fpath):
         links.append(path)
         blink = "/".join(links)
         ret.append({"name": path, "url": blink})
-
+    print ret
     return ret
