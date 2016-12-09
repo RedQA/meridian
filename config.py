@@ -20,7 +20,7 @@ with open(custom_yaml_path, "r") as f:
     git_repo_root = str(custom_config["git_repo_root"])
     if not os.path.exists(git_repo_root):
         sys.stderr.write(
-            "git_repo_root=%s not existed on the filesystem" % git_repo_rootf)
+            "git_repo_root=%s not existed on the filesystem" % git_repo_root)
         sys.exit(-1)
 
     app.config.git_repo_root = git_repo_root
