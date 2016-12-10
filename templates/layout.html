@@ -42,15 +42,6 @@
     <link href="{{ url_for('static', filename='vendor/syntaxhighlighter_3.0.83/styles/shThemeDefault.css') }}" rel="stylesheet"
         type="text/css" />
 
-    <!-- angularjs -->
-    <script type="text/javascript" src="{{ url_for('static', filename='bower_components/angular/angular.min.js')}}"></script>
-    <script>
-        var app = angular.module('meridian', []);
-        app.config(['$interpolateProvider', function ($interpolateProvider) {
-        $interpolateProvider.startSymbol('{ng');
-        $interpolateProvider.endSymbol('ng}');
-    }]);
-    </script>
 </head>
 
 <body class="nav-md">
