@@ -1,6 +1,7 @@
 import json
 
 from flask import Blueprint, current_app, jsonify, render_template, request
+
 from apps.covstats import get_hit_set
 from apps.middleware import gd
 from apps.projects.files import (get_directory_structure, is_directory,
@@ -8,6 +9,16 @@ from apps.projects.files import (get_directory_structure, is_directory,
 
 project = Blueprint("project", __name__,
                     template_folder="../../templates", static_folder="../.../static")
+
+
+@project.route("/")
+@gd
+def projects_root():
+    if request.method == "GET":
+        projects = current_app.config.db.get_all_projects()
+        return None, None, projects
+    elif request.method == "POST":
+        pass
 
 
 @project.route("/<string:pname>/tree/")
@@ -21,7 +32,7 @@ def project_tree_path(pname, fpath=None):
         if ret:
             d_content = get_directory_structure(path, request.path)
             d_content["breadlinks"] = breadlinks
-            return "structure.html", d_content
+            return "structure.html", d_content, None
         else:
             f_content, code_type, code_type_script = read_file_with_type(path)
             if f_content:
@@ -33,7 +44,7 @@ def project_tree_path(pname, fpath=None):
                     "code_type_script": code_type_script,
                     "breadlinks": breadlinks
                 }
-                return "code.html", f_context
+                return "code.html", f_context, None
             else:
                 # work round for error
                 f_context = {
@@ -42,7 +53,7 @@ def project_tree_path(pname, fpath=None):
                     "code_type_script": "shBrushPython.js",
                     "breadlinks": breadlinks
                 }
-                return "code.html", f_context
+                return "code.html", f_context, None
 
     # FIXME add 404 handler
 
@@ -60,5 +71,4 @@ def bread_link(pname, fpath):
         links.append(path)
         blink = "/".join(links)
         ret.append({"name": path, "url": blink})
-    print ret
     return ret

@@ -42,9 +42,15 @@
     <link href="{{ url_for('static', filename='vendor/syntaxhighlighter_3.0.83/styles/shThemeDefault.css') }}" rel="stylesheet"
         type="text/css" />
 
-    <style type='text/css'>
-
-    </style>
+    <!-- angularjs -->
+    <script type="text/javascript" src="{{ url_for('static', filename='bower_components/angular/angular.min.js')}}"></script>
+    <script>
+        var app = angular.module('meridian', []);
+        app.config(['$interpolateProvider', function ($interpolateProvider) {
+        $interpolateProvider.startSymbol('{ng');
+        $interpolateProvider.endSymbol('ng}');
+    }]);
+    </script>
 </head>
 
 <body class="nav-md">
@@ -67,12 +73,12 @@
                     <!-- sidebar menu -->
                     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                         <div class="menu_section">
-         
+
                             <ul class="nav side-menu">
                                 <li><a><i class="fa fa-home"></i> 项目列表 <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         {% for project in projects %}
-                                        <li><a href="/projects/{{ project["name"] }}/tree">{{ project["name"] }}</a></li>
+                                        <li><a href="/projects/{{ project[" name "] }}/tree">{{ project["name"] }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 </li>
@@ -126,11 +132,13 @@
     <script src="{{ url_for('static', filename='bower_components/gentelella/vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <!-- custom js -->
     <script src="{{ url_for('static', filename='bower_components/gentelella/build/js/custom.min.js') }}"></script>
-
+    <!-- load meridian.js -->
+    <script src="{{ url_for('static', filename='js/meridian.js') }}"></script>
     <!-- Finally, to actually run the highlighter, you need to include this JS on your page -->
     <script type="text/javascript">
         SyntaxHighlighter.all();
     </script>
+
 
 </body>
 

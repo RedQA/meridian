@@ -4,8 +4,7 @@ index = Blueprint("home", __name__, static_folder="../static",
                   template_folder="../templates")
 
 
-
 @index.route('/')
 @gd
 def home():
-    return 'index.html', {}
+    return 'index.html', {}, None

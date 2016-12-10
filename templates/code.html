@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block content %}
 <!-- page content -->
-<div class="right_col" role="main" style="min-height: 1162px;">
+<div ng-app="meridian" class="right_col" role="main" style="min-height: 1162px;">
     <div class="">
         <div class="page-title">
             <div class="title_left">
@@ -26,7 +26,7 @@
                 <div class="x_panel">
                     <div class="x_title">
                         {% for bl in breadlinks %}
-                        <h2><a href="{{ bl[" url "] }}"> / {{ bl["name"] }} &nbsp </a> </h2>
+                        <h2><a href="{{ bl["url"] }}"> / {{ bl["name"] }} &nbsp </a> </h2>
                         {% endfor %}
                         <div class="clearfix"></div>
                     </div>
