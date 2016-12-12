@@ -20,9 +20,8 @@ var create_project = function () {
 
 var clean_coverage = function (dom) {
     var pname = $(dom).attr("id");
-    var project_clean_url = "/projects/" + pname + "/clean";
-    alert(proejct_clean_url);
+    var project_clean_url = "/projects/" + pname + "/clean/";
     $.post(project_clean_url, {}, function (data) {
-
+        
     });
 };

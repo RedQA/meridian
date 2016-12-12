@@ -45,12 +45,14 @@ def projects_root():
         return "project_node.html", context, None
 
 
+@project.route("/<string:pname>/clean", methods=['POST'])
 @project.route("/<string:pname>/clean/", methods=['POST'])
 @gd
 def clean_project_redis(pname):
     project = current_app.config.db.get_project_by_name(pname)
     if project:
         # remove the redis
+        return None, None, {}
     else:
         abort(404)
 
