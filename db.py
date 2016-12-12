@@ -42,7 +42,7 @@ class RedisManager(object):
                 "redis_db":0
             }
         """
-        pname = project["name"]
+        pname = project["pname"]
         redis_db = int(project["redisdb"])
         redis_db_conn = None
         if pname in cls.redis_dbconn_pool_by_project:

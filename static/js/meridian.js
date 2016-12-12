@@ -12,7 +12,9 @@ var create_project = function () {
         "drname": drname,
         "sourcelist": sourcelist
     }, function (data) {
-        alert(data);
+        $("#project_table tr:last").after(data);
+        // hidden the dialog
+        $('#myModal').modal('toggle');
     });
 };
 

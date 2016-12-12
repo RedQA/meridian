@@ -1,12 +1,13 @@
 """
     define all the related
 """
+
 project_schema = {
     # required
     "pname": "",
     "gitaddr": "",
     "redisdb": "",
-    "drname"
+    "drname": "",
     # optional
     "sourcelist": [],
     # calculated

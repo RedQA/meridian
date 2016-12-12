@@ -37,7 +37,12 @@ def projects_root():
         new_project_record["fsroot"] = os.path.join(
             current_app.config.git_repo_root, drname)
         current_app.config.db.create_project(new_project_record)
-        return None, None, new_project_record
+
+        context = {
+            "project": new_project_record
+        }
+
+        return "project_node.html", context, None
 
 
 @project.route("/<string:pname>/tree/")
