@@ -14,22 +14,15 @@ class JsonDB(object):
     def project_table(self):
         return self.__project_table
 
-    def create_project(self, pname, gitaddr, redisdb, fsroot):
-        self.__project_table.insert(
-            {
-                "pname": pname,
-                "gitaddr": gitaddr,
-                "redisdb": redisdb,
-                "fsroot": fsroot
-            }
-        )
+    def create_project(self, record):
+        self.__project_table.insert(record)
 
     def get_all_projects(self):
         return self.__project_table.all()
 
     def get_project_by_name(self, pname):
         query = Query()
-        project = self.__project_table.get(query.name == pname)
+        project = self.__project_table.get(query.pname == pname)
         return project
 
 

@@ -1,4 +1,6 @@
 import json
+import os
+from copy import deepcopy
 
 from flask import Blueprint, current_app, jsonify, render_template, request
 
@@ -6,19 +8,36 @@ from apps.covstats import get_hit_set
 from apps.middleware import gd
 from apps.projects.files import (get_directory_structure, is_directory,
                                  read_file_with_type)
+from apps.schema import project_schema
 
 project = Blueprint("project", __name__,
                     template_folder="../../templates", static_folder="../.../static")
 
 
-@project.route("/")
+@project.route("/", methods=['GET', 'POST'])
 @gd
 def projects_root():
     if request.method == "GET":
         projects = current_app.config.db.get_all_projects()
         return None, None, projects
     elif request.method == "POST":
-        pass
+        form_data = request.form
+        pname = form_data["pname"]
+        redisdb = int(form_data["redisdb"])
+        gitaddr = form_data["gitaddr"]
+        drname = form_data["drname"]
+        sourcelist = form_data["sourcelist"]
+        # create the new data record
+        new_project_record = deepcopy(project_schema)
+        new_project_record["pname"] = pname
+        new_project_record["redisdb"] = redisdb
+        new_project_record["gitaddr"] = gitaddr
+        new_project_record["drname"] = drname
+        new_project_record["sourcelist"] = sourcelist.split(",")
+        new_project_record["fsroot"] = os.path.join(
+            current_app.config.git_repo_root, drname)
+        current_app.config.db.create_project(new_project_record)
+        return None, None, new_project_record
 
 
 @project.route("/<string:pname>/tree/")

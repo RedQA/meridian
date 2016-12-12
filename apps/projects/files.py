@@ -35,7 +35,7 @@ def is_directory(project, fpath):
     split_fpath = []
     if fpath:
         split_fpath = fpath.split("/")
-    path = os.path.join(project["project_root"], *split_fpath)
+    path = os.path.join(project["fsroot"], *split_fpath)
     return os.path.isdir(path), path
 
 

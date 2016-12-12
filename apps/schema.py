@@ -3,12 +3,12 @@
 """
 project_schema = {
     # required
-    "name": "",
+    "pname": "",
     "gitaddr": "",
     "redisdb": "",
-    "fsdname": ""
+    "drname"
     # optional
-    "sources": [],
+    "sourcelist": [],
     # calculated
     "fsroot": ""
 }

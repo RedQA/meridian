@@ -2,13 +2,17 @@ var create_project = function () {
     var pname = $("#pname").val();
     var gitaddr = $("#gitaddr").val();
     var redisdb = $("#redisdb").val();
-    var fsroot = $("fsroot").val();
-    var sourcelist = $("sourcelist").val();
-
+    var drname = $("#drname").val();
+    var sourcelist = $("#sourcelist").val();
     // aysnc call to create the project
-    $.ajax({
-        url: "/projects/",
-        async: true,
+    $.post("/projects/", {
+        "pname": pname,
+        "gitaddr": gitaddr,
+        "redisdb": redisdb,
+        "drname": drname,
+        "sourcelist": sourcelist
+    }, function (data) {
+        alert(data);
     });
 };
 
