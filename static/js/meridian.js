@@ -18,6 +18,7 @@ var create_project = function () {
     });
 };
 
-var clean_coverage = function () {
-
+var clean_coverage = function (dom) {
+    var pname = $(dom).attr("id");
+    var project_clean_url = "/projects/" + pname + "/clean"
 };

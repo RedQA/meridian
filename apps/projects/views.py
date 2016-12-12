@@ -2,7 +2,7 @@ import json
 import os
 from copy import deepcopy
 
-from flask import Blueprint, current_app, jsonify, render_template, request
+from flask import Blueprint, current_app, jsonify, render_template, request,abort
 
 from apps.covstats import get_hit_set
 from apps.middleware import gd
@@ -44,6 +44,15 @@ def projects_root():
 
         return "project_node.html", context, None
 
+
+@project.route("/<string:pname>/clean/", methods=[POST'])
+@gd
+def clean_project_redis(pname):
+    project = current_app.config.db.get_project_by_name(pname)
+    if project:
+        # remove the redis
+    else:
+        abort(404)
 
 @project.route("/<string:pname>/tree/")
 @project.route("/<string:pname>/tree/<path:fpath>")
