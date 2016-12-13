@@ -22,7 +22,14 @@ var clean_coverage = function (dom) {
     var pname = $(dom).attr("id");
     var project_clean_url = "/projects/" + pname + "/clean/";
     $.post(project_clean_url, {}, function (data) {
-
+        if (data["is_success"] == true) {
+            $("#contentHead").prepend($('<div class="alert alert-success" role="alert" id="alertRedisSuccess"> Redis 中的数据已清空</div>'));
+        } else {
+            $("#contentHead").prepend($('<div class="alert alert-danger" role="alert" id="alertRedisFail"> Redis 中的数据已失败</div>'));
+        }
+        setTimeout(function () {
+            $(".alert").alert("close");
+        }, 1000);
     });
 };
 
