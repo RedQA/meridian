@@ -60,7 +60,7 @@ var git_sync = function (dom) {
 
             setTimeout(function () {
                 $(".alert").alert("close");
-            }, 2000);
+            }, 5000);
         },
         async: true
     });
