@@ -14,4 +14,23 @@ def gd(view_method):
         else:
             # support it's the api render
             return jsonify(content)
+
+    return wrapper
+
+
+def api(view_method):
+    @wraps(view_method)
+    def wrapper(*args, **kwargs):
+        is_success, error_msg, content = view_method(*args, **kwargs)
+
+        res = dict()
+        res['is_success'] = is_success
+
+        if error_msg is not None:
+            res['error_msg'] = error_msg
+        if content is not None:
+            res['content'] = content
+
+        return jsonify(res)
+
     return wrapper

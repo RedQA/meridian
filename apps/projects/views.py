@@ -6,7 +6,7 @@ from flask import Blueprint, current_app, jsonify, render_template, request, abo
 from pip.vcs.git import Git
 
 from apps.covstats import get_hit_set
-from apps.middleware import gd
+from apps.middleware import gd, api
 from apps.projects.files import (get_directory_structure, is_directory,
                                  read_file_with_type)
 from apps.schema import project_schema
@@ -97,30 +97,22 @@ def project_tree_path(pname, fpath=None):
 
 @project.route("/<string:pname>/gitsync", methods=['POST'])
 @project.route("/<string:pname>/gitsync/", methods=['POST'])
-@gd
+@api
 def sync_project(pname):
     project = current_app.config.db.get_project_by_name(pname)
-    content = {
-        'is_success': False,
-        'error_msg': 'internal error',
-        'content': {}
-    }
 
     if project is None:
-        content['error_msg'] = u'Project is not existed!'
-        return None, None, content
+        return False, u'Project is not existed!', None
 
     git = Git(url=project['gitaddr'])
-    rev_options = [request.form['branch']]
+    rev_options = [request.form['gitbranch']]
     try:
         git.switch(dest=project['fsroot'], url=project['gitaddr'], rev_options=rev_options)
         git.update(dest=project['fsroot'], rev_options=rev_options)
-        content['is_success'] = True
-        content['error_msg'] = ''
     except Exception as e:
-        content['error_msg'] = e.message
+        return False, e.message, None
 
-    return None, None, content
+    return True, None, None
 
 
 def bread_link(pname, fpath):
