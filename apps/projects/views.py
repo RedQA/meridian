@@ -10,6 +10,7 @@ from apps.middleware import gd, api
 from apps.projects.files import (get_directory_structure, is_directory,
                                  read_file_with_type)
 from apps.schema import project_schema
+from db import RedisManager
 
 project = Blueprint("project", __name__,
                     template_folder="../../templates", static_folder="../.../static")
@@ -48,14 +49,21 @@ def projects_root():
 
 @project.route("/<string:pname>/clean", methods=['POST'])
 @project.route("/<string:pname>/clean/", methods=['POST'])
-@gd
+@api
 def clean_project_redis(pname):
     project = current_app.config.db.get_project_by_name(pname)
-    if project:
-        # remove the redis
-        return None, None, {}
-    else:
-        abort(404)
+
+    if project is None:
+        return False, u'Project is not existed!', None
+
+    redis_conn = RedisManager.get_redis_connection(project=project)
+
+    try:
+        redis_conn.flushdb()
+    except Exception as e:
+        return False, e.message, None
+
+    return True, None, None
 
 
 @project.route("/<string:pname>/tree/")
