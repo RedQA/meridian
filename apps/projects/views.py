@@ -6,7 +6,7 @@ from flask import Blueprint, current_app, jsonify, render_template, request, abo
 from pip.vcs.git import Git
 
 from apps.covstats import get_hit_set
-from apps.middleware import gd, api
+from apps.middleware import gateway
 from apps.projects.files import (get_directory_structure, is_directory,
                                  read_file_with_type)
 from apps.schema import project_schema
@@ -17,11 +17,11 @@ project = Blueprint("project", __name__,
 
 
 @project.route("/", methods=['GET', 'POST'])
-@gd
+@gateway
 def projects_root():
     if request.method == "GET":
         projects = current_app.config.db.get_all_projects()
-        return None, None, projects
+        return True, True, None, projects
     elif request.method == "POST":
         form_data = request.form
         pname = form_data["pname"]
@@ -44,31 +44,31 @@ def projects_root():
             "project": new_project_record
         }
 
-        return "project_node.html", context, None
+        return False, "project_node.html", context, None
 
 
 @project.route("/<string:pname>/clean", methods=['POST'])
 @project.route("/<string:pname>/clean/", methods=['POST'])
-@api
+@gateway
 def clean_project_redis(pname):
     project = current_app.config.db.get_project_by_name(pname)
 
     if project is None:
-        return False, u'Project is not existed!', None
+        return True, False, u'Project is not existed!', None
 
     redis_conn = RedisManager.get_redis_connection(project=project)
 
     try:
         redis_conn.flushdb()
     except Exception as e:
-        return False, e.message, None
+        return True, False, e.message, None
 
-    return True, None, None
+    return True, True, None, None
 
 
 @project.route("/<string:pname>/tree/")
 @project.route("/<string:pname>/tree/<path:fpath>")
-@gd
+@gateway
 def project_tree_path(pname, fpath=None):
     project = current_app.config.db.get_project_by_name(pname)
     if project:
@@ -77,7 +77,7 @@ def project_tree_path(pname, fpath=None):
         if ret:
             d_content = get_directory_structure(path, request.path)
             d_content["breadlinks"] = breadlinks
-            return "structure.html", d_content, None
+            return False, "structure.html", d_content
         else:
             f_content, code_type, code_type_script = read_file_with_type(path)
             if f_content:
@@ -89,7 +89,7 @@ def project_tree_path(pname, fpath=None):
                     "code_type_script": code_type_script,
                     "breadlinks": breadlinks
                 }
-                return "code.html", f_context, None
+                return False, "code.html", f_context
             else:
                 # work round for error
                 f_context = {
@@ -98,29 +98,30 @@ def project_tree_path(pname, fpath=None):
                     "code_type_script": "shBrushPython.js",
                     "breadlinks": breadlinks
                 }
-                return "code.html", f_context, None
+                return False, "code.html", f_context
 
                 # FIXME add 404 handler
 
 
 @project.route("/<string:pname>/gitsync", methods=['POST'])
 @project.route("/<string:pname>/gitsync/", methods=['POST'])
-@api
+@gateway
 def sync_project(pname):
     project = current_app.config.db.get_project_by_name(pname)
 
     if project is None:
-        return False, u'Project is not existed!', None
+        return True, False, u'Project is not existed!', None
 
     git = Git(url=project['gitaddr'])
     rev_options = [request.form['gitbranch']]
     try:
-        git.switch(dest=project['fsroot'], url=project['gitaddr'], rev_options=rev_options)
+        git.switch(dest=project['fsroot'], url=project[
+                   'gitaddr'], rev_options=rev_options)
         git.update(dest=project['fsroot'], rev_options=rev_options)
     except Exception as e:
-        return False, e.message, None
+        return True, False, e.message, None
 
-    return True, None, None
+    return True, True, None, None
 
 
 def bread_link(pname, fpath):
