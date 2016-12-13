@@ -3,6 +3,7 @@ import os
 from copy import deepcopy
 
 from flask import Blueprint, current_app, jsonify, render_template, request, abort
+from pip.vcs.git import Git
 
 from apps.covstats import get_hit_set
 from apps.middleware import gd
@@ -91,7 +92,35 @@ def project_tree_path(pname, fpath=None):
                 }
                 return "code.html", f_context, None
 
-    # FIXME add 404 handler
+                # FIXME add 404 handler
+
+
+@project.route("/<string:pname>/gitsync", methods=['POST'])
+@project.route("/<string:pname>/gitsync/", methods=['POST'])
+@gd
+def sync_project(pname):
+    project = current_app.config.db.get_project_by_name(pname)
+    content = {
+        'is_success': False,
+        'error_msg': 'internal error',
+        'content': {}
+    }
+
+    if project is None:
+        content['error_msg'] = u'Project is not existed!'
+        return None, None, content
+
+    git = Git(url=project['gitaddr'])
+    rev_options = [request.form['branch']]
+    try:
+        git.switch(dest=project['fsroot'], url=project['gitaddr'], rev_options=rev_options)
+        git.update(dest=project['fsroot'], rev_options=rev_options)
+        content['is_success'] = True
+        content['error_msg'] = ''
+    except Exception as e:
+        content['error_msg'] = e.message
+
+    return None, None, content
 
 
 def bread_link(pname, fpath):
