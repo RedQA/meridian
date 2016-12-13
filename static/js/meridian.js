@@ -44,7 +44,25 @@ var git_sync = function (dom) {
     var pname = $(dom).attr("id");
     var project_sync_url = "/projects/" + pname + "/gitsync/";
     var gitbranch = $("#gitbranch").val();
-    $.post(project_sync_url, { "gitbranch": gitbranch }, function (data) {
-        $('#myModal2').modal('toggle');
+    $.ajax({
+        type: "POST",
+        url: project_sync_url,
+        data: { "gitbranch": gitbranch },
+        success: function (data) {
+            $('#myModal2').modal('toggle');
+            waitingDialog.hide();
+            if (data["is_success"] == true) {
+                $("#contentHead").prepend($('<div class="alert alert-success" role="alert" id="alertSuccess"> Sync 成功 </div>'));
+            } else {
+                var errormsg = data["error_msg"]
+                $("#contentHead").prepend($(`<div class="alert alert-danger" role="alert" id="alertFail"> ${errormsg} </div>`));
+            }
+
+            setTimeout(function () {
+                $(".alert").alert("close");
+            }, 2000);
+        },
+        async: true
     });
+    waitingDialog.show('Custom message', { dialogSize: 'sm', progressType: 'warning' });
 };
