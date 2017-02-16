@@ -15,10 +15,10 @@
 Project Schema
 ``` json
 {
-    "project_name": "fulishe",
+    "project_name": "****",
     "git": "https:/***/red-qa/meridian.git",
     "redis_db": "0",
-    "fs_root": "/repository/fulishe"
+    "fs_root": "/repository/***"
 }
 ```
 
