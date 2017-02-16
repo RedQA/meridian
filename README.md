@@ -16,7 +16,7 @@ Project Schema
 ``` json
 {
     "project_name": "fulishe",
-    "git": "https://gitlab.xiaohongshu.com/red-qa/meridian.git",
+    "git": "https:/***/red-qa/meridian.git",
     "redis_db": "0",
     "fs_root": "/repository/fulishe"
 }
